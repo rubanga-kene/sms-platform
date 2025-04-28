@@ -120,7 +120,7 @@ export default function Login() {
         {error && <p className="text-center text-red-500">{error}</p>}
 
         <div className="text-center text-gray-600">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <a className="text-blue-600 hover:underline" href="/signup">
             Sign up
           </a>
