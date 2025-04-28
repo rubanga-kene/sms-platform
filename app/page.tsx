@@ -104,7 +104,7 @@ export default function Login() {
               />
               <span className="ml-2">Remember me</span>
             </label>
-            <a className="text-sm text-blue-600 hover:underline" href="#">
+            <a className="text-sm text-blue-600 hover:underline" href="/send-message">
               Forgot your password?
             </a>
           </div>
