@@ -1,103 +1,131 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+
+export default function Login() {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber, password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || 'Invalid phone number or password.');
+        return;
+      }
+
+      window.location.href = '/dashboard'; // Redirect after login
+    } catch (err) {
+      console.error(err);
+      setError('An unexpected error occurred.');
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div
+        style={{ animation: 'slideInFromLeft 1s ease-out' }}
+        className="max-w-md w-full bg-white rounded-xl shadow-2xl overflow-hidden p-8 space-y-8"
+      >
+        <h2
+          style={{ animation: 'appear 2s ease-out' }}
+          className="text-center text-4xl font-extrabold text-gray-900"
+        >
+          Welcome
+        </h2>
+        <p style={{ animation: 'appear 3s ease-out' }} className="text-center text-gray-600">
+          Sign in to your account
+        </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="relative">
+            <input
+              placeholder="123-456-7890"
+              className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 bg-transparent placeholder-transparent focus:outline-none focus:border-blue-500"
+              required
+              id="phoneNumber"
+              name="phoneNumber"
+              type="text"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <label
+              className="absolute left-0 -top-3.5 text-gray-500 text-sm transition-all 
+                         peer-placeholder-shown:text-base 
+                         peer-placeholder-shown:text-gray-400 
+                         peer-placeholder-shown:top-2 
+                         peer-focus:-top-3.5 
+                         peer-focus:text-blue-500 
+                         peer-focus:text-sm"
+              htmlFor="phoneNumber"
+            >
+              Phone number
+            </label>
+          </div>
+
+          <div className="relative">
+            <input
+              placeholder="Password"
+              className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 bg-transparent placeholder-transparent focus:outline-none focus:border-blue-500"
+              required
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label
+              className="absolute left-0 -top-3.5 text-gray-500 text-sm transition-all 
+                         peer-placeholder-shown:text-base 
+                         peer-placeholder-shown:text-gray-400 
+                         peer-placeholder-shown:top-2 
+                         peer-focus:-top-3.5 
+                         peer-focus:text-blue-500 
+                         peer-focus:text-sm"
+              htmlFor="password"
+            >
+              Password
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="flex items-center text-sm text-gray-600">
+              <input
+                className="form-checkbox h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+                type="checkbox"
+              />
+              <span className="ml-2">Remember me</span>
+            </label>
+            <a className="text-sm text-blue-600 hover:underline" href="#">
+              Forgot your password?
+            </a>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-700 rounded-md shadow-lg text-white font-semibold transition duration-200"
           >
-            Read our docs
+            Sign In
+          </button>
+        </form>
+
+        {error && <p className="text-center text-red-500">{error}</p>}
+
+        <div className="text-center text-gray-600">
+          Don't have an account?{' '}
+          <a className="text-blue-600 hover:underline" href="/signup">
+            Sign up
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+    </main>
   );
 }
