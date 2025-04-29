@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import bcrypt from 'bcryptjs';
+// import bcrypt from 'bcryptjs';
 import dbConnect from '../../lib/db';
 import User from '../../models/User';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { phone, password } = req.body;
+  const { phone } = req.body;
 
   await dbConnect();
 
