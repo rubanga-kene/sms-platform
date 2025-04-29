@@ -40,12 +40,24 @@ export default function Signup() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || 'Something went wrong.');
+        const contentType = res.headers.get("content-type");
+        let errorMessage = 'Something went wrong.';
+      
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json();
+          errorMessage = data.error || errorMessage;
+        } else {
+          const text = await res.text();
+          errorMessage = text || errorMessage;
+        }
+      
+        setError(errorMessage);
         return;
       }
+      
+      
 
-      window.location.href = '/login'; // Redirect to login page after success
+      window.location.href = '/'; // Redirect to login page after success
     } catch (err) {
       console.error(err);
       setError('An unexpected error occurred.');

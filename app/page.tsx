@@ -9,26 +9,36 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+  
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phoneNumber, password }),
       });
-
+  
+      const contentType = res.headers.get("content-type");
+      let data: any = {};
+  
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        data = { error: text };
+      }
+  
       if (!res.ok) {
-        const data = await res.json();
         setError(data.error || 'Invalid phone number or password.');
         return;
       }
-
-      window.location.href = '/dashboard'; // Redirect after login
+  
+      window.location.href = '/send-message'; // Redirect after login
     } catch (err) {
       console.error(err);
       setError('An unexpected error occurred.');
     }
   };
-
+  
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
       <div
@@ -104,7 +114,7 @@ export default function Login() {
               />
               <span className="ml-2">Remember me</span>
             </label>
-            <a className="text-sm text-blue-600 hover:underline" href="/send-message">
+            <a className="text-sm text-blue-600 hover:underline" href="#">
               Forgot your password?
             </a>
           </div>
