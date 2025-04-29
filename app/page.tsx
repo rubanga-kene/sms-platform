@@ -18,7 +18,8 @@ export default function Login() {
       });
   
       const contentType = res.headers.get("content-type");
-      let data: any = {};
+      let data: { error?: string } = {};
+
   
       if (contentType && contentType.includes("application/json")) {
         data = await res.json();

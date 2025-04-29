@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   const fullName = formData.get('fullName') as string;
   const phoneNumber = formData.get('phoneNumber') as string;
   const password = formData.get('password') as string;
-  const profilePicture = formData.get('profilePicture') as File | null;
+//   const profilePicture = formData.get('profilePicture') as File | null;
 
   if (!fullName || !phoneNumber || !password) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
