@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const existing = await User.findOne({ phone });
   if (existing) return res.status(400).json({ error: 'User already exists' });
 
-  const hashed = await bcrypt.hash(password, 10);
+  // const hashed = await bcrypt.hash(password, 10);
   // const user = await User.create({ phone, password: hashed });
 
   res.status(201).json({ message: 'User created successfully' });
