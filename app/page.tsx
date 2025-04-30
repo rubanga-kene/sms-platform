@@ -18,8 +18,7 @@ export default function Login() {
       });
   
       const contentType = res.headers.get("content-type");
-      let data: { error?: string } = {};
-
+      let data: { token?: string; error?: string } = {};
   
       if (contentType && contentType.includes("application/json")) {
         data = await res.json();
@@ -28,17 +27,22 @@ export default function Login() {
         data = { error: text };
       }
   
-      if (!res.ok) {
+      if (!res.ok || !data.token) {
         setError(data.error || 'Invalid phone number or password.');
         return;
       }
   
-      window.location.href = '/send-message'; // Redirect after login
+      // ✅ Store JWT in localStorage
+      localStorage.setItem('token', data.token);
+  
+      // ✅ Redirect to protected page
+      window.location.href = '/send-message';
     } catch (err) {
       console.error(err);
       setError('An unexpected error occurred.');
     }
   };
+  
   
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">

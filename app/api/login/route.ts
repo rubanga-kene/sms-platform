@@ -1,4 +1,4 @@
-import  dbConnect  from '../../lib/db';
+import dbConnect from '../../lib/db';
 import User from '../../models/User';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -22,5 +22,11 @@ export async function POST(req: Request) {
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, { expiresIn: '7d' });
 
-  return NextResponse.json({ token, user: { fullName: user.fullName, phoneNumber: user.phoneNumber } });
+  return NextResponse.json({
+    token,
+    user: {
+      fullName: user.fullName,
+      phoneNumber: user.phoneNumber
+    }
+  });
 }
